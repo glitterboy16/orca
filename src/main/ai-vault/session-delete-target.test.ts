@@ -1,4 +1,4 @@
-import { join } from 'node:path'
+import { join, resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { validateAiVaultSessionDeleteTarget } from './session-delete-target'
 
@@ -170,13 +170,38 @@ describe('validateAiVaultSessionDeleteTarget', () => {
     expect(result).toEqual({ allowed: false, agent: 'openclaw', reason: 'undiscoverable-path' })
   })
 
-  it('rejects an agent whose own registry would keep a dangling entry (codex)', () => {
+  // Hideout: codex pasó a ser borrable; el ejecutor expande alias y olvida el thread en su db.
+  // resolve() en las expectativas: en Windows antepone la unidad y el resto de la suite asume POSIX.
+  it('allows a codex rollout inside its sessions root and plans its file removal', () => {
+    const CODEX_ROOT = join(HOME, '.codex', 'sessions')
+    const filePath = join(
+      CODEX_ROOT,
+      '2026',
+      '03',
+      '10',
+      'rollout-2026-03-10T16-51-57-019cd872-a17d-7f72-9c15-734bb6799a5f.jsonl'
+    )
     const result = validateAiVaultSessionDeleteTarget({
       agent: 'codex',
-      filePath: join(HOME, '.codex', 'sessions', 'rollout-1.jsonl'),
+      filePath,
+      executionHostId: 'local',
+      rootOptions: { codexSessionsDir: CODEX_ROOT }
+    })
+    expect(result).toEqual({
+      allowed: true,
+      agent: 'codex',
+      resolvedPath: resolve(filePath),
+      removals: [{ path: resolve(filePath), kind: 'file', roots: [resolve(CODEX_ROOT)] }]
+    })
+  })
+
+  it('rejects an agent whose own registry would keep a dangling entry (antigravity)', () => {
+    const result = validateAiVaultSessionDeleteTarget({
+      agent: 'antigravity',
+      filePath: join(HOME, '.antigravity', 'sessions', 'rollout-1.jsonl'),
       executionHostId: 'local'
     })
-    expect(result).toEqual({ allowed: false, agent: 'codex', reason: 'unsupported-agent' })
+    expect(result).toEqual({ allowed: false, agent: 'antigravity', reason: 'unsupported-agent' })
   })
 
   it('rejects a non-local execution host', () => {

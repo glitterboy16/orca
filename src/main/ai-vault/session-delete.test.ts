@@ -152,19 +152,44 @@ describe('deleteAiVaultSessionFile', () => {
   })
 
   it('short-circuits a rejected validation (unsupported agent) before touching the filesystem', async () => {
-    const filePath = join(HOME, '.codex', 'sessions', 'rollout-1.jsonl')
+    const filePath = join(HOME, '.antigravity', 'sessions', 'session-1.jsonl')
 
     const result = await deleteAiVaultSessionFile({
-      agent: 'codex',
+      agent: 'antigravity',
       filePath,
       executionHostId: 'local'
     })
 
-    expect(result).toEqual({ outcome: 'rejected', agent: 'codex', reason: 'unsupported-agent' })
+    expect(result).toEqual({
+      outcome: 'rejected',
+      agent: 'antigravity',
+      reason: 'unsupported-agent'
+    })
     expect(lstatMock).not.toHaveBeenCalled()
     expect(realpathMock).not.toHaveBeenCalled()
     expect(trashItemMock).not.toHaveBeenCalled()
     expect(tryDeleteWslUncPathMock).not.toHaveBeenCalled()
+  })
+
+  // Hideout: codex ya es borrable; un rollout sin fecha en el nombre no expande alias.
+  // resolve() porque en Windows el validador antepone la unidad a las rutas /tmp de la suite.
+  it('trashes a codex rollout through the same guarded removal path', async () => {
+    const CODEX_ROOT = join(HOME, '.codex', 'sessions')
+    const filePath = resolve(join(CODEX_ROOT, 'rollout-1.jsonl'))
+    lstatMock.mockResolvedValue({ isFile: () => true })
+    realpathMock.mockResolvedValue(filePath)
+    trashItemMock.mockResolvedValue(undefined)
+
+    const result = await deleteAiVaultSessionFile({
+      agent: 'codex',
+      filePath,
+      executionHostId: 'local',
+      rootOptions: { codexSessionsDir: CODEX_ROOT }
+    })
+
+    expect(result).toEqual({ outcome: 'deleted' })
+    expect(trashItemMock).toHaveBeenCalledTimes(1)
+    expect(trashItemMock).toHaveBeenCalledWith(filePath)
   })
 
   it('uses a successful WSL-helper result before local file trash', async () => {

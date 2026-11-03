@@ -8,6 +8,7 @@ import {
   validateAiVaultSessionDeleteTarget,
   type ValidateAiVaultSessionDeleteTargetArgs
 } from './session-delete-target'
+import { expandCodexSessionDeleteRemovals } from './codex-session-delete-aliases'
 import { tryDeleteWslUncPath, WslDeleteValidationError } from '../wsl-unc-delete'
 import { isENOENT } from '../ipc/filesystem/filesystem-path-containment'
 
@@ -23,7 +24,16 @@ export async function deleteAiVaultSessionFile(
   if (!validation.allowed) {
     return { outcome: 'rejected', agent: validation.agent, reason: validation.reason }
   }
-  const { agent, removals } = validation
+  const { agent } = validation
+  // Hideout: un rollout de Codex replicado por homes debe caer con todos sus alias a la vez.
+  const removals =
+    agent === 'codex'
+      ? await expandCodexSessionDeleteRemovals({
+          resolvedPath: validation.resolvedPath,
+          rootOptions: args.rootOptions,
+          wslHomeDirs: args.wslHomeDirs
+        })
+      : validation.removals
 
   try {
     for (const removal of removals) {
