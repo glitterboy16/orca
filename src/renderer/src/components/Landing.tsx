@@ -18,6 +18,7 @@ import { hasGitHubBackedProject, type PreflightIssue } from './landing-preflight
 import { useLandingPreflightRuntime } from './landing-preflight-runtime'
 import { useLandingOrcaStarState, type LandingStarState } from './landing-github-star-state'
 import { openAppHttpLink } from '@/lib/app-http-link-open'
+import { HIDEOUT_BRAND } from '../../../shared/hideout-brand'
 
 type ShortcutItem = {
   id: string
@@ -260,14 +261,10 @@ export default function Landing(): React.JSX.Element {
             className="flex items-center justify-center size-20 rounded-2xl border border-border/80 shadow-lg shadow-black/40"
             style={{ backgroundColor: '#12181e' }}
           >
-            <img
-              src={logo}
-              alt={translate('auto.components.Landing.520304a067', 'Orca logo')}
-              className="size-12"
-            />
+            <img src={logo} alt={`${HIDEOUT_BRAND.productName} logo`} className="size-12" />
           </div>
           <h1 className="text-4xl font-bold text-foreground tracking-tight">
-            {translate('auto.components.Landing.6ca6ff404e', 'ORCA')}
+            {HIDEOUT_BRAND.productName.toUpperCase()}
           </h1>
 
           {preflightIssues.length > 0 && <PreflightBanner issues={preflightIssues} repos={repos} />}
