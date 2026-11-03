@@ -7,6 +7,7 @@ import { translateMain } from '../i18n/main-i18n'
 import { quitAndStopAllSessionsMenuText } from '../menu/app-menu-quit-item'
 import { composeTrayAttentionIcon, tintTrayTemplateForAttention } from './tray-attention-icon'
 import { stampTrayDevBadge } from './tray-dev-badge'
+import { HIDEOUT_BRAND } from '../../shared/hideout-brand'
 
 export type SystemTrayOptions = {
   /** App icon id from settings; the tray reuses the app icon image. */
@@ -45,9 +46,11 @@ let nativeThemeUpdatedListener: (() => void) | null = null
 // Per-worktree tooltips distinguish concurrent dev instances.
 function baseTooltip(): string {
   if (!devIndicator) {
-    return 'Orca'
+    return HIDEOUT_BRAND.productName
   }
-  return devIndicator.label ? `Orca DEV (${devIndicator.label})` : 'Orca DEV'
+  return devIndicator.label
+    ? `${HIDEOUT_BRAND.productName} DEV (${devIndicator.label})`
+    : `${HIDEOUT_BRAND.productName} DEV`
 }
 
 // Downscale the app image for Windows' 16px notification-area slot.

@@ -25,6 +25,7 @@ import {
 } from './windows-install-dir-acl-recovery'
 import { mainProcessState as state, gpuFallbackEnvironment } from './main-process-state'
 import { createGpuAccelerationAboutPanelOptions } from '../menu/gpu-acceleration-about-panel'
+import { HIDEOUT_BRAND } from '../../shared/hideout-brand'
 
 export function createGpuCrashDiagnosticsRecorder(): GpuCrashDiagnosticsRecorder | null {
   if (process.platform !== 'win32') {
@@ -40,15 +41,16 @@ export function createGpuCrashDiagnosticsRecorder(): GpuCrashDiagnosticsRecorder
 }
 
 export function updateGpuAccelerationAboutPanel(): void {
-  app.setAboutPanelOptions(
-    createGpuAccelerationAboutPanelOptions({
-      appName: app.name,
+  app.setAboutPanelOptions({
+    ...createGpuAccelerationAboutPanelOptions({
+      appName: HIDEOUT_BRAND.productName,
       appVersion: app.getVersion(),
       platform: process.platform,
       gpuFallbackActive: state.gpuFallbackActiveThisLaunch,
       gpuFeatureStatus: state.gpuFeatureStatus
-    })
-  )
+    }),
+    copyright: HIDEOUT_BRAND.credit
+  })
 }
 
 function getWindowsGpuFallbackEnvironment(): WindowsGpuFallbackEnvironment | null {

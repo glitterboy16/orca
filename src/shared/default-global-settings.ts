@@ -40,7 +40,8 @@ export function buildDefaultSettings(args: {
     branchPrefix: 'git-username',
     branchPrefixCustom: '',
     jiraIssueKeyCasing: 'lowercase',
-    theme: 'system',
+    // Hideout: negro por defecto (plan Fase 0).
+    theme: 'dark',
     pluginAppTheme: null,
     pluginAppThemeLight: null,
     pluginAppThemeDark: null,
