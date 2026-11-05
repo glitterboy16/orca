@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#101013"/>
+      <stop offset="1" stop-color="#060607"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="188" fill="url(#bg)"/>
+  <rect x="14" y="14" width="996" height="996" rx="176" fill="none" stroke="#FFFFFF" stroke-opacity="0.07" stroke-width="4"/>
+
+  <!-- Estilo Casa Tere: línea caligráfica a una tinta, blanca sobre negro -->
+  <g stroke="#F5F5F4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Tejado: trazo suelto flotando sobre la H, pico suave y caída asimétrica -->
+    <path d="M 324 344 C 390 300, 462 248, 514 240 C 566 248, 640 302, 702 348" stroke-width="27"/>
+    <!-- H protagonista: barras con leve curva caligráfica, pies en el horizonte -->
+    <path d="M 408 372 C 398 490, 398 630, 410 752" stroke-width="40"/>
+    <path d="M 618 372 C 628 490, 628 630, 616 752" stroke-width="40"/>
+    <!-- Travesaño bajo: la puerta del escondite -->
+    <path d="M 428 596 C 482 584, 546 584, 598 596" stroke-width="32"/>
+    <!-- Horizonte: olas largas -->
+    <path d="M 92 782 C 250 750, 420 804, 560 780 C 706 754, 828 786, 934 766" stroke-width="15"/>
+    <path d="M 200 836 C 350 814, 510 846, 660 824 C 756 810, 828 822, 878 816" stroke-width="9" stroke-opacity="0.7"/>
+    <!-- Gaviotas -->
+    <path d="M 196 250 C 216 234, 234 234, 248 246 C 262 234, 280 232, 300 244" stroke-width="12"/>
+    <path d="M 270 300 C 284 290, 296 290, 306 298 C 316 290, 328 288, 342 296" stroke-width="8" stroke-opacity="0.75"/>
+  </g>
+  <!-- Luna creciente -->
+  <path d="M 788 200 A 56 56 0 1 0 840 278 A 44 44 0 0 1 788 200 Z" fill="#F5F5F4"/>
+</svg>

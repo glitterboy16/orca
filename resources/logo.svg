@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Hideout: H geométrica con la barra baja (puerta del escondite) -->
+<!-- Hideout: marca de línea estilo Casa Tere (Ĥ casita + luna), blanca sobre transparente -->
 <svg version="1.1" width="202.66667" height="202.66667" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-  <rect x="236" y="128" width="148" height="768" rx="14" fill="#ffffff"/>
-  <rect x="640" y="128" width="148" height="768" rx="14" fill="#ffffff"/>
-  <rect x="384" y="562" width="256" height="142" fill="#ffffff"/>
+  <g stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 282 342 C 364 276, 456 216, 508 208 C 560 216, 656 282, 734 348" stroke-width="52"/>
+    <path d="M 388 400 C 378 530, 378 680, 390 812" stroke-width="72"/>
+    <path d="M 636 400 C 646 530, 646 680, 634 812" stroke-width="72"/>
+    <path d="M 420 628 C 476 614, 548 614, 604 628" stroke-width="56"/>
+  </g>
+  <path d="M 812 170 A 72 72 0 1 0 880 272 A 58 58 0 0 1 812 170 Z" fill="#ffffff"/>
 </svg>

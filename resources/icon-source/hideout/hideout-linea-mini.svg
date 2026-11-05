@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" rx="188" fill="#0B0B0D"/>
+  <!-- Variante para 16-48px: solo Ĥ con trazos gruesos -->
+  <g stroke="#F5F5F4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 300 348 C 380 282, 466 226, 514 218 C 562 226, 652 288, 726 352" stroke-width="56"/>
+    <path d="M 396 420 C 388 540, 388 670, 398 790" stroke-width="78"/>
+    <path d="M 630 420 C 638 540, 638 670, 628 790" stroke-width="78"/>
+    <path d="M 430 628 C 482 616, 544 616, 596 628" stroke-width="62"/>
+  </g>
+</svg>
