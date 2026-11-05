@@ -1,0 +1,60 @@
+{
+  "agente": "HideoutGrabador/1.0 (uso personal)",
+  "tinta": "#ffffff",
+  "fondoPrevia": "#0B0B0D",
+  "alfa": 100,
+  "nitidez": 0.5,
+  "salida": "grabado-salida",
+  "piezas": [
+    {
+      "nombre": "buho",
+      "fuente": "candidatos/psm-mephisto.png",
+      "recorte": [0.03, 0.0, 0.82, 1.0],
+      "max": 1000,
+      "ampliar": true,
+      "peso": 0.78,
+      "limpieza": 0.1,
+      "calidad": 90,
+      "credito": {
+        "obra": "The owl Mephistopheles, Popular Science Monthly vol. 55",
+        "autor": "Anónimo",
+        "fecha": "1899",
+        "licencia": "Dominio público",
+        "pagina": "https://commons.wikimedia.org/wiki/File:PSM_V55_D643_The_owl_mephistopheles.png"
+      }
+    },
+    {
+      "nombre": "buho-cara",
+      "fuente": "candidatos/psm-mephisto.png",
+      "recorte": [0.13, 0.0, 0.63, 0.31],
+      "max": 320,
+      "ampliar": true,
+      "peso": 0.62,
+      "limpieza": 0.1,
+      "nitidez": 0.4,
+      "calidad": 90,
+      "credito": {
+        "obra": "The owl Mephistopheles (detalle), Popular Science Monthly vol. 55",
+        "autor": "Anónimo",
+        "fecha": "1899",
+        "licencia": "Dominio público",
+        "pagina": "https://commons.wikimedia.org/wiki/File:PSM_V55_D643_The_owl_mephistopheles.png"
+      }
+    },
+    {
+      "nombre": "buho-nido",
+      "fuente": "candidatos/psm-tawny-owl.jpg",
+      "max": 1000,
+      "peso": 0.8,
+      "limpieza": 0.12,
+      "calidad": 90,
+      "credito": {
+        "obra": "The tawny owl of Europe, Popular Science Monthly vol. 11",
+        "autor": "Anónimo",
+        "fecha": "1877",
+        "licencia": "Dominio público",
+        "pagina": "https://commons.wikimedia.org/wiki/File:PSM_V11_D162_The_tawny_owl_of_europe.jpg"
+      }
+    }
+  ]
+}
