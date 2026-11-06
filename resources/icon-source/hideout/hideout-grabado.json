@@ -7,53 +7,43 @@
   "salida": "grabado-salida",
   "piezas": [
     {
-      "nombre": "buho",
-      "fuente": "candidatos/psm-mephisto.png",
-      "recorte": [0.03, 0.0, 0.82, 1.0],
+      "nombre": "mochuelo",
+      "fuente": "candidatos/uil-boek.jpg",
+      "recorte": [0.08, 0.09, 0.88, 0.83],
       "max": 1000,
-      "ampliar": true,
-      "peso": 0.78,
-      "limpieza": 0.1,
+      "peso": 0.82,
+      "limpieza": 0.18,
+      "aplanar": true,
       "calidad": 90,
       "credito": {
-        "obra": "The owl Mephistopheles, Popular Science Monthly vol. 55",
-        "autor": "Anónimo",
-        "fecha": "1899",
-        "licencia": "Dominio público",
-        "pagina": "https://commons.wikimedia.org/wiki/File:PSM_V55_D643_The_owl_mephistopheles.png"
+        "obra": "Uil zittend op een boek (RP-P-1931-1131)",
+        "autor": "Frans Everbag, Rijksmuseum",
+        "fecha": "1887–1931",
+        "licencia": "CC0",
+        "pagina": "https://commons.wikimedia.org/wiki/File:Uil_zittend_op_een_boek,_RP-P-1931-1131.jpg"
       }
     },
     {
-      "nombre": "buho-cara",
-      "fuente": "candidatos/psm-mephisto.png",
-      "recorte": [0.13, 0.0, 0.63, 0.31],
-      "max": 320,
-      "ampliar": true,
-      "peso": 0.62,
-      "limpieza": 0.1,
-      "nitidez": 0.4,
-      "calidad": 90,
-      "credito": {
-        "obra": "The owl Mephistopheles (detalle), Popular Science Monthly vol. 55",
-        "autor": "Anónimo",
-        "fecha": "1899",
-        "licencia": "Dominio público",
-        "pagina": "https://commons.wikimedia.org/wiki/File:PSM_V55_D643_The_owl_mephistopheles.png"
-      }
-    },
-    {
-      "nombre": "buho-nido",
-      "fuente": "candidatos/psm-tawny-owl.jpg",
+      "nombre": "vampiro",
+      "fuente": "candidatos/psm-vampiro.jpg",
+      "recorte": [0.04, 0.02, 1.0, 0.78],
       "max": 1000,
+      "ampliar": true,
       "peso": 0.8,
-      "limpieza": 0.12,
+      "limpieza": 0.22,
       "calidad": 90,
+      "zonas": [
+        { "rect": [0.0, 0.4, 0.3, 1.0], "limpieza": 1 },
+        { "rect": [0.7, 0.72, 1.0, 1.0], "limpieza": 1 },
+        { "rect": [0.0, 0.0, 0.12, 0.4], "limpieza": 1 },
+        { "rect": [0.88, 0.0, 1.0, 0.3], "limpieza": 1 }
+      ],
       "credito": {
-        "obra": "The tawny owl of Europe, Popular Science Monthly vol. 11",
+        "obra": "Vampire bat of South America, Popular Science Monthly vol. 7",
         "autor": "Anónimo",
-        "fecha": "1877",
+        "fecha": "1875",
         "licencia": "Dominio público",
-        "pagina": "https://commons.wikimedia.org/wiki/File:PSM_V11_D162_The_tawny_owl_of_europe.jpg"
+        "pagina": "https://commons.wikimedia.org/wiki/File:PSM_V07_D665_Vampire_bat_of_south_america.jpg"
       }
     }
   ]

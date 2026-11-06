@@ -1,30 +1,34 @@
-# Marca de Hideout: el búho "Mephistopheles"
+# Marca de Hideout: el mochuelo del Rijksmuseum
 
 Grabado antiguo convertido a tinta blanca sobre transparente, al estilo de las
-ilustraciones de Casa Tere (láminas científicas del XIX procesadas con el
-**Grabador**, `casatere/herramientas/grabados`).
+ilustraciones de Casa Tere (láminas del XIX-XX procesadas con el **Grabador**,
+`casatere/herramientas/grabados`).
 
-- **Obra**: _The owl Mephistopheles_, Popular Science Monthly vol. 55 (1899).
-  Dominio público. Ficha: <https://commons.wikimedia.org/wiki/File:PSM_V55_D643_The_owl_mephistopheles.png>
-- **Por qué un búho**: el vigilante nocturno del escondite — anida en huecos y
-  ruinas, mira desde la oscuridad. Los dos ojos leen hasta a 16 px.
+- **Obra**: _Uil zittend op een boek_ (mochuelo sobre un libro), Frans Everbag,
+  Rijksmuseum RP-P-1931-1131, 1887–1931. Licencia CC0.
+  Ficha: <https://commons.wikimedia.org/wiki/File:Uil_zittend_op_een_boek,_RP-P-1931-1131.jpg>
+- **Por qué**: el vigilante nocturno del escondite. La aguatinta tonal, al
+  invertirla, deja una lechuza blanca de mirada severa emergiendo del negro.
+- **Composición**: busto con fundido inferior (el libro original traía pared y
+  papeles que ensuciaban el icono). El ICO usa el busto en todos los tamaños:
+  a 16–64 px lee como silueta de lechuza blanca.
 
 ## Archivos
 
-| Archivo                     | Qué es                                                                                       |
-| --------------------------- | -------------------------------------------------------------------------------------------- |
-| `psm-mephisto-original.png` | Lámina original escaneada (Wikimedia Commons)                                                |
-| `hideout-grabado.json`      | Config del Grabador (recortes, peso, limpieza)                                               |
-| `buho.png`                  | Grabado procesado: búho entero, tinta blanca sobre transparente                              |
-| `buho-cara.png`             | Detalle de la cara, trazo engordado, para iconos de 16–48 px                                 |
-| `componer-iconos.mjs`       | Composición de iconos (necesita `sharp` y `png-to-ico`; rutas de la sesión en que se generó) |
+| Archivo                 | Qué es                                                                                       |
+| ----------------------- | -------------------------------------------------------------------------------------------- |
+| `uil-boek-original.jpg` | Lámina original escaneada (Wikimedia Commons)                                                |
+| `hideout-grabado.json`  | Config del Grabador (recorte, peso, limpieza, aplanado)                                      |
+| `mochuelo.png`          | Grabado procesado completo (con libro), tinta blanca sobre transparente                      |
+| `busto.png`             | Busto recortado con fundido inferior: la marca final                                         |
+| `componer-iconos.mjs`   | Composición de iconos (necesita `sharp` y `png-to-ico`; rutas de la sesión en que se generó) |
 
 ## Cómo regenerar
 
-1. `node grabar.mjs hideout-grabado.json` con el Grabador de Casa Tere
-   (o cualquier copia de la herramienta) desde una carpeta con `candidatos/psm-mephisto.png`.
-2. `node componer-iconos.mjs` ajustando las rutas de la cabecera.
-   El ICO lleva la escena completa en 256/128/64 y solo la cara en 48/32/16.
+1. `node grabar.mjs hideout-grabado.json` con el Grabador de Casa Tere desde una
+   carpeta con `candidatos/uil-boek.jpg` (la pieza se llama `mochuelo`).
+2. `node componer-iconos.mjs` ajustando las rutas de la cabecera. El busto se
+   recorta de `mochuelo.png` (30,0,720×800) con degradado de alfa al 76–100 %.
 
 Destinos: `resources/build/icon.{png,ico}`, `resources/icon.png`,
 `resources/icon-dev.png` (punto ámbar) y `resources/logo.svg` (marca de la app).

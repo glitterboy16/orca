@@ -1,5 +1,4 @@
-// Compone los iconos de Hideout con el grabado del búho Mephistopheles.
-// sharp se toma del Grabador de Casa Tere; png-to-ico del proyecto de iconos previo.
+// Iconos de Hideout con el mochuelo del Rijksmuseum: busto con fundido inferior.
 import { createRequire } from 'node:module'
 import { writeFileSync } from 'node:fs'
 import path from 'node:path'
@@ -13,8 +12,10 @@ const pngToIcoMod = createRequire(
 )('png-to-ico')
 const pngToIco = pngToIcoMod.default ?? pngToIcoMod
 
-const SALIDA = path.join(AQUI, 'iconos')
-const GRABADO = path.join(AQUI, 'grabado-salida')
+const SALIDA = path.join(AQUI, 'iconos-mochuelo')
+const fs = await import('node:fs/promises')
+await fs.mkdir(SALIDA, { recursive: true })
+
 const fondoSvg = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024">
   <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0" stop-color="#101013"/><stop offset="1" stop-color="#060607"/>
@@ -26,16 +27,31 @@ const puntoDev = Buffer.from(
   `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024"><circle cx="880" cy="880" r="74" fill="#E8B04B"/></svg>`
 )
 
-const fs = await import('node:fs/promises')
-await fs.mkdir(SALIDA, { recursive: true })
+// 1 · Busto: recorte del mochuelo sin libro + fundido de alfa hacia abajo
+const SRC = path.join(AQUI, 'grabado-salida', 'mochuelo.png')
+const bust = await sharp(SRC)
+  .extract({ left: 30, top: 0, width: 720, height: 800 })
+  .png()
+  .toBuffer()
+const fade = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="720" height="800">
+  <defs><linearGradient id="f" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#fff" stop-opacity="1"/>
+    <stop offset="0.76" stop-color="#fff" stop-opacity="1"/>
+    <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+  </linearGradient></defs>
+  <rect width="720" height="800" fill="url(#f)"/>
+</svg>`)
+const busto = await sharp(bust)
+  .composite([{ input: await sharp(fade).png().toBuffer(), blend: 'dest-in' }])
+  .png()
+  .toBuffer()
+writeFileSync(path.join(SALIDA, 'busto.png'), busto)
 
-const fondo = await sharp(fondoSvg).png().toBuffer()
-
-// Icono grande: búho entero (805×1000) a 800 de alto, centrado
-const buho = await sharp(path.join(GRABADO, 'buho.png')).resize({ height: 800 }).png().toBuffer()
-const buhoMeta = await sharp(buho).metadata()
-const icono1024 = await sharp(fondo)
-  .composite([{ input: buho, left: Math.round((1024 - buhoMeta.width) / 2), top: 112 }])
+// 2 · Icono grande
+const b = await sharp(busto).resize({ height: 760 }).png().toBuffer()
+const bm = await sharp(b).metadata()
+const icono1024 = await sharp(await sharp(fondoSvg).png().toBuffer())
+  .composite([{ input: b, left: Math.round((1024 - bm.width) / 2), top: 140 }])
   .png()
   .toBuffer()
 writeFileSync(path.join(SALIDA, 'icon-1024.png'), icono1024)
@@ -45,8 +61,6 @@ for (const s of [512, 256, 128, 64]) {
     await sharp(icono1024).resize(s, s).png().toBuffer()
   )
 }
-
-// Icono dev: punto ámbar
 const dev1024 = await sharp(icono1024)
   .composite([{ input: await sharp(puntoDev).png().toBuffer() }])
   .png()
@@ -56,16 +70,18 @@ writeFileSync(
   await sharp(dev1024).resize(256, 256).png().toBuffer()
 )
 
-// Mini: solo la cara (320×228) a 880 de ancho, centrada
-const cara = await sharp(path.join(GRABADO, 'buho-cara.png'))
-  .resize({ width: 880 })
+// 3 · Mini: solo la cara (ojos severos) para 16-48
+const cara = await sharp(SRC)
+  .extract({ left: 380, top: 10, width: 330, height: 300 })
   .png()
   .toBuffer()
-const caraMeta = await sharp(cara).metadata()
-const mini1024 = await sharp(fondo)
-  .composite([{ input: cara, left: 72, top: Math.round((1024 - caraMeta.height) / 2) }])
+const c = await sharp(cara).resize({ width: 900 }).png().toBuffer()
+const cm = await sharp(c).metadata()
+const mini1024 = await sharp(await sharp(fondoSvg).png().toBuffer())
+  .composite([{ input: c, left: 62, top: Math.round((1024 - cm.height) / 2) }])
   .png()
   .toBuffer()
+writeFileSync(path.join(SALIDA, 'mini-1024.png'), mini1024)
 for (const s of [48, 32, 16]) {
   writeFileSync(
     path.join(SALIDA, `mini-${s}.png`),
@@ -73,37 +89,33 @@ for (const s of [48, 32, 16]) {
   )
 }
 
-// ICO: escena completa en 256/128/64, cara en 48/32/16
+// 4 · ICO por tamaños
 const partes = ['icon-256', 'icon-128', 'icon-64', 'mini-48', 'mini-32', 'mini-16'].map((n) =>
   path.join(SALIDA, `${n}.png`)
 )
 writeFileSync(path.join(SALIDA, 'icon.ico'), await pngToIco(partes))
 
-// Marca para la app (logo.svg): búho blanco sobre transparente, PNG incrustado
-const marcaPng = await sharp(path.join(GRABADO, 'buho.png'))
-  .resize({ height: 640 })
-  .png()
-  .toBuffer()
+// 5 · Marca (logo.svg): busto blanco sobre transparente
+const marcaPng = await sharp(busto).resize({ height: 640 }).png().toBuffer()
 const m = await sharp(marcaPng).metadata()
 const x = Math.round((1024 - m.width) / 2)
 const svg = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Hideout: búho "Mephistopheles" (Popular Science Monthly, 1899, dominio público),
-     grabado procesado a tinta blanca con el Grabador. Fuente en resources/icon-source/hideout/ -->
+<!-- Hideout: mochuelo de "Uil zittend op een boek" (Frans Everbag, Rijksmuseum, CC0),
+     grabado procesado a tinta blanca. Fuentes en resources/icon-source/hideout/ -->
 <svg version="1.1" width="202.66667" height="202.66667" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <image x="${x}" y="192" width="${m.width}" height="640" xlink:href="data:image/png;base64,${marcaPng.toString('base64')}"/>
 </svg>
 `
 writeFileSync(path.join(SALIDA, 'logo.svg'), svg)
 
-// Previa de la marca sobre fondo oscuro para revisar
 const marcaPrevia = await sharp({
   create: { width: 360, height: 360, channels: 4, background: '#0B0B0D' }
 })
   .composite([
-    { input: await sharp(marcaPng).resize({ height: 300 }).png().toBuffer(), left: 120, top: 30 }
+    { input: await sharp(busto).resize({ height: 300 }).png().toBuffer(), left: 45, top: 30 }
   ])
   .png()
   .toBuffer()
 writeFileSync(path.join(SALIDA, 'marca-previa.png'), marcaPrevia)
 
-console.log('iconos listos en', SALIDA)
+console.log('listo en', SALIDA)
