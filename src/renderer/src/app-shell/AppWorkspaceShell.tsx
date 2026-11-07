@@ -36,6 +36,7 @@ const MobilePage = lazy(() => import('../components/mobile/MobilePage'))
 // Hideout: vistas propias del fork.
 const ConsumoPage = lazy(() => import('../hideout/ConsumoPage'))
 const PlantillasPage = lazy(() => import('../hideout/PlantillasPage'))
+const AyudanteFlotante = lazy(() => import('../hideout/AyudanteChat'))
 const Terminal = lazy(() => import('../components/Terminal'))
 
 type WorktreeSidebarScrollRefs = {
@@ -277,6 +278,10 @@ export function AppWorkspaceShell(props: {
             <RightSidebar />
           </RecoverableRenderErrorBoundary>
         ) : null}
+        {/* Hideout: chat Ayudante flotante, disponible en todas las vistas. */}
+        <Suspense fallback={null}>
+          <AyudanteFlotante />
+        </Suspense>
       </div>
     </RecoverableRenderErrorBoundary>
   )

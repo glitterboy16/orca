@@ -19,6 +19,7 @@ import type {
 } from './api/agent-usage-api'
 import type { AiVaultApi } from './api/ai-vault-api'
 import type { ConsumoResumen } from '../shared/hideout-consumo'
+import type { AyudantePregunta, AyudanteRespuesta } from '../shared/hideout-ayudante'
 import type { AppApi, E2EApi, PlatformApi } from './api/app-api'
 import type { AutomationsApi } from './api/automation-api'
 import type { BrowserApi } from './api/browser/browser-api'
@@ -142,8 +143,12 @@ export type PreloadApi = {
   openCodeUsage: OpenCodeUsageApi
   museUsage: MuseUsageApi
   aiVault: AiVaultApi
-  // Hideout: superficies propias del fork (panel de consumo).
-  hideout: { consumoResumen: () => Promise<ConsumoResumen> }
+  // Hideout: superficies propias del fork (panel de consumo, ayudante).
+  hideout: {
+    consumoResumen: () => Promise<ConsumoResumen>
+    ayudantePreguntar: (datos: AyudantePregunta) => Promise<AyudanteRespuesta>
+    ayudanteReiniciar: () => Promise<void>
+  }
   nativeChat: NativeChatApi
   fs: FilesystemApi['fs']
   git: Merged<GitInspectionApi & GitOperationApi>

@@ -22,6 +22,7 @@ Fork personal de [Orca](https://github.com/stablyai/orca) (stablyai/orca, MIT) r
 | Panel de Consumo (ideas 1, 3, 5) | Código propio en `src/main/hideout/` (escáner de `~/.claude/projects/*/*.jsonl` con cache por mtime) y `src/renderer/src/hideout/ConsumoPage.tsx`. Enganches mínimos en Orca: vista `consumo` (`ui-chrome-types`, `top-level-view`, `UiViewHistory`, enum RPC móvil), render en `AppWorkspaceShell`, botón en `SidebarNav`, bridge en `preload` y registro IPC en `main-window-core-services` |
 | Plantillas de proyecto (idea 16, v1) | `src/shared/hideout-plantillas.ts` + `src/renderer/src/hideout/PlantillasPage.tsx` (vista `plantillas`): Landing, PrestaShop, Laravel+React, Shopify y n8n con CLAUDE.md y kit de skills/MCP copiables |
 | Skills visible de serie (idea 25) | `default-global-settings.ts` (`showSkillsButton: true`) y `shouldShowSkillsButton` pasa a `!== false` (en Orca es opt-in) |
+| Ayudante flotante | Chat disponible en todas las vistas que responde sobre lo que hay en pantalla y el código de la app. `src/shared/hideout-ayudante.ts`, `src/main/hideout/ayudante-ipc.ts` (lanza `claude -p` solo lectura —Read/Glob/Grep— con captura de la ventana como contexto; conversación persistente vía `--resume`, estado en `userData/hideout-ayudante.json`) y `src/renderer/src/hideout/AyudanteChat.tsx`. Enganches: montaje en `AppWorkspaceShell`, API `hideout` en preload y registro IPC en `main-window-core-services` |
 
 **Sin tocar a propósito:**
 
