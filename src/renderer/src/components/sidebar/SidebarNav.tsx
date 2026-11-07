@@ -10,7 +10,11 @@ import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { SetupGuideSidebarEntry } from './SetupGuideSidebarEntry'
-import { ConsumoSidebarButton, PlantillasSidebarButton } from '@/hideout/ConsumoSidebarButton'
+import {
+  ConsumoSidebarButton,
+  PlantillasSidebarButton,
+  ProyectosSidebarButton
+} from '@/hideout/ConsumoSidebarButton'
 import { SidebarTaskNavButton } from './SidebarTaskNavButton'
 import { HideSidebarMenu } from './sidebar-nav-controls'
 import { translate } from '@/i18n/i18n'
@@ -120,6 +124,7 @@ const SidebarNav = React.memo(function SidebarNav() {
       </button>
       <SetupGuideSidebarEntry />
       <SidebarTaskNavButton />
+      <ProyectosSidebarButton />
       <ConsumoSidebarButton />
       <PlantillasSidebarButton />
       {showArtifactsButton ? (

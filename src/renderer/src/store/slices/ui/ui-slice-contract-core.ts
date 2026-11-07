@@ -126,6 +126,7 @@ export type UiViewHistory =
   // Hideout: vistas propias del fork.
   | 'consumo'
   | 'plantillas'
+  | 'proyectos'
 
 export type UISliceCore = {
   sidebarOpen: boolean

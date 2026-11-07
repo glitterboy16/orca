@@ -3,15 +3,16 @@
 // se entiende. Montado una sola vez en el shell: la conversación no se pierde
 // al cambiar de vista ni al cerrar el panel.
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Eye, EyeOff, MessageCircleQuestion, RotateCcw, Send, X } from 'lucide-react'
+import { Eye, EyeOff, MessageCircleQuestion, RotateCcw, Send, Settings2, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { isImeOwnedKeyboardEvent } from '@/lib/ime-composition-keyboard-event'
 import { useAppStore } from '@/store'
+import { AyudanteAjustes } from './AyudanteAjustes'
 
 type Mensaje = { rol: 'yo' | 'ayudante' | 'error'; texto: string }
 
 const SALUDO =
-  'Pregúntame por lo que ves en pantalla, por una opción que no entiendas o por el código de la app. Miro una captura de la ventana al responder.'
+  'Pregúntame por lo que ves en pantalla, por una opción que no entiendas o por el código de la app. Miro una captura de la ventana al responder. También puedo cerrar todas las sesiones de Claude Code abiertas si me lo pides.'
 
 function Burbuja({ mensaje }: { mensaje: Mensaje }): React.JSX.Element {
   return (
@@ -37,6 +38,7 @@ export default function AyudanteFlotante(): React.JSX.Element {
   const [texto, setTexto] = useState('')
   const [ocupado, setOcupado] = useState(false)
   const [conCaptura, setConCaptura] = useState(true)
+  const [conAjustes, setConAjustes] = useState(false)
   const listaRef = useRef<HTMLDivElement>(null)
   const entradaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -112,6 +114,17 @@ export default function AyudanteFlotante(): React.JSX.Element {
             </button>
             <button
               type="button"
+              title="Ajustes (API de Claude)"
+              onClick={() => setConAjustes((valor) => !valor)}
+              className={cn(
+                'rounded-md p-1.5 transition-colors hover:bg-foreground/8',
+                conAjustes ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+              )}
+            >
+              <Settings2 className="size-3.5" />
+            </button>
+            <button
+              type="button"
               title="Nueva conversación"
               onClick={reiniciar}
               className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-foreground/8 hover:text-foreground"
@@ -127,6 +140,7 @@ export default function AyudanteFlotante(): React.JSX.Element {
               <X className="size-3.5" />
             </button>
           </div>
+          {conAjustes ? <AyudanteAjustes /> : null}
           <div ref={listaRef} className="scrollbar-sleek flex-1 space-y-2 overflow-y-auto p-3">
             {mensajes.length === 0 ? (
               <p className="px-1 py-2 text-[12px] leading-relaxed text-muted-foreground">

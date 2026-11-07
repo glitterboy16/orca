@@ -1,5 +1,5 @@
 // Hideout: entradas propias del sidebar, siguiendo el patrón de SidebarNav.
-import { Gauge, LayoutTemplate } from 'lucide-react'
+import { FolderOpen, Gauge, LayoutTemplate } from 'lucide-react'
 import { useAppStore } from '@/store'
 import { cn } from '@/lib/utils'
 import type { TopLevelView } from '../../../shared/ui-chrome-types'
@@ -43,4 +43,8 @@ export function ConsumoSidebarButton(): React.JSX.Element {
 
 export function PlantillasSidebarButton(): React.JSX.Element {
   return <HideoutNavButton vista="plantillas" etiqueta="Plantillas" Icono={LayoutTemplate} />
+}
+
+export function ProyectosSidebarButton(): React.JSX.Element {
+  return <HideoutNavButton vista="proyectos" etiqueta="Proyectos" Icono={FolderOpen} />
 }

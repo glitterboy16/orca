@@ -35,7 +35,7 @@ La nº 2 (barra de límite siempre visible) ya la cubre la barra de uso de Orca
 
 ## Proyectos y chats
 
-- [ ] 15. ★ Pantalla de inicio con proyectos, estado y último chat
+- [x] 15. ★ Pantalla de inicio con proyectos, estado y último chat (v1: pestaña Proyectos leyendo FREELACE, clientes/personales con distintivo y último chat; falta que sea la pantalla de inicio)
 - [x] 16. ★ Plantillas de proyecto (v1: página Plantillas con CLAUDE.md y kit de skills/MCP copiables; falta integrar en el flujo de crear proyecto)
 - [o] 17. Varios chats por proyecto en pestañas, cada uno en su worktree
 - [o] 18. Misma tarea a dos agentes, quedarse con la mejor rama

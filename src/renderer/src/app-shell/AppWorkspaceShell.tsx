@@ -36,6 +36,7 @@ const MobilePage = lazy(() => import('../components/mobile/MobilePage'))
 // Hideout: vistas propias del fork.
 const ConsumoPage = lazy(() => import('../hideout/ConsumoPage'))
 const PlantillasPage = lazy(() => import('../hideout/PlantillasPage'))
+const ProyectosPage = lazy(() => import('../hideout/ProyectosPage'))
 const AyudanteFlotante = lazy(() => import('../hideout/AyudanteChat'))
 const Terminal = lazy(() => import('../components/Terminal'))
 
@@ -103,6 +104,7 @@ function ActivePage({ layout }: { layout: AppChromeLayout }): React.JSX.Element 
       {activeView === 'mobile' ? <MobilePage /> : null}
       {activeView === 'consumo' ? <ConsumoPage /> : null}
       {activeView === 'plantillas' ? <PlantillasPage /> : null}
+      {activeView === 'proyectos' ? <ProyectosPage /> : null}
       {activeView === 'terminal' && creationLayoutActive && activePendingCreationId ? (
         <PendingCreationSurface
           creationId={activePendingCreationId}

@@ -130,3 +130,4 @@ export type TopLevelView =
   // Hideout: vistas propias del fork.
   | 'consumo'
   | 'plantillas'
+  | 'proyectos'

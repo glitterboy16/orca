@@ -119,7 +119,8 @@ export const TopLevelViewSchema = z.enum([
   'mobile',
   // Hideout: vistas propias del fork.
   'consumo',
-  'plantillas'
+  'plantillas',
+  'proyectos'
 ])
 
 export const UiUpdateFields = z

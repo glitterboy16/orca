@@ -19,7 +19,12 @@ import type {
 } from './api/agent-usage-api'
 import type { AiVaultApi } from './api/ai-vault-api'
 import type { ConsumoResumen } from '../shared/hideout-consumo'
-import type { AyudantePregunta, AyudanteRespuesta } from '../shared/hideout-ayudante'
+import type {
+  AyudanteConfig,
+  AyudantePregunta,
+  AyudanteRespuesta
+} from '../shared/hideout-ayudante'
+import type { ProyectosResumen } from '../shared/hideout-proyectos'
 import type { AppApi, E2EApi, PlatformApi } from './api/app-api'
 import type { AutomationsApi } from './api/automation-api'
 import type { BrowserApi } from './api/browser/browser-api'
@@ -148,6 +153,10 @@ export type PreloadApi = {
     consumoResumen: () => Promise<ConsumoResumen>
     ayudantePreguntar: (datos: AyudantePregunta) => Promise<AyudanteRespuesta>
     ayudanteReiniciar: () => Promise<void>
+    ayudanteConfig: () => Promise<AyudanteConfig>
+    ayudanteApiKey: (apiKey: string | null) => Promise<void>
+    proyectosResumen: () => Promise<ProyectosResumen>
+    proyectosAbrir: (ruta: string) => Promise<void>
   }
   nativeChat: NativeChatApi
   fs: FilesystemApi['fs']

@@ -13,7 +13,8 @@ const TOP_LEVEL_VIEW_LOOKUP: Record<TopLevelView, true> = {
   mobile: true,
   // Hideout: vistas propias del fork.
   consumo: true,
-  plantillas: true
+  plantillas: true,
+  proyectos: true
 }
 
 export function isTopLevelView(value: unknown): value is TopLevelView {
