@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron'
 import { HIDEOUT_CONSUMO_CHANNEL } from '../../shared/hideout-consumo'
-import { escanearConsumo } from './consumo-scan'
+import { escanearConsumoRapido, precalentarConsumo } from './consumo-scan'
 
 let registrado = false
 
@@ -10,5 +10,7 @@ export function registerHideoutConsumoHandlers(): void {
     return
   }
   registrado = true
-  ipcMain.handle(HIDEOUT_CONSUMO_CHANNEL, () => escanearConsumo())
+  ipcMain.handle(HIDEOUT_CONSUMO_CHANNEL, () => escanearConsumoRapido())
+  // Deja el resumen listo antes de que Angel abra el panel.
+  precalentarConsumo()
 }

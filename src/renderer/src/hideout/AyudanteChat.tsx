@@ -3,7 +3,16 @@
 // se entiende. Montado una sola vez en el shell: la conversación no se pierde
 // al cambiar de vista ni al cerrar el panel.
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Eye, EyeOff, MessageCircleQuestion, RotateCcw, Send, Settings2, X } from 'lucide-react'
+import {
+  Eye,
+  EyeOff,
+  Loader2,
+  MessageCircleQuestion,
+  RotateCcw,
+  Send,
+  Settings2,
+  X
+} from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { isImeOwnedKeyboardEvent } from '@/lib/ime-composition-keyboard-event'
 import { useAppStore } from '@/store'
@@ -39,6 +48,8 @@ export default function AyudanteFlotante(): React.JSX.Element {
   const [ocupado, setOcupado] = useState(false)
   const [conCaptura, setConCaptura] = useState(true)
   const [conAjustes, setConAjustes] = useState(false)
+  const [progreso, setProgreso] = useState('Pensando…')
+  const [segundos, setSegundos] = useState(0)
   const listaRef = useRef<HTMLDivElement>(null)
   const entradaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -55,6 +66,20 @@ export default function AyudanteFlotante(): React.JSX.Element {
     }
   }, [abierto])
 
+  // El proceso principal retransmite el paso en curso (leyendo X, buscando Y…).
+  useEffect(() => window.api.hideout.ayudanteOnProgreso(setProgreso), [])
+
+  useEffect(() => {
+    if (!ocupado) {
+      return
+    }
+    const inicio = Date.now()
+    const intervalo = setInterval(() => {
+      setSegundos(Math.floor((Date.now() - inicio) / 1000))
+    }, 1_000)
+    return () => clearInterval(intervalo)
+  }, [ocupado])
+
   const enviar = useCallback(async () => {
     const pregunta = texto.trim()
     if (!pregunta || ocupado) {
@@ -62,6 +87,8 @@ export default function AyudanteFlotante(): React.JSX.Element {
     }
     setTexto('')
     setMensajes((previos) => [...previos, { rol: 'yo', texto: pregunta }])
+    setProgreso(conCaptura ? 'Mirando tu pantalla…' : 'Enviando la pregunta…')
+    setSegundos(0)
     setOcupado(true)
     try {
       const respuesta = await window.api.hideout.ayudantePreguntar({
@@ -151,9 +178,13 @@ export default function AyudanteFlotante(): React.JSX.Element {
               <Burbuja key={indice} mensaje={mensaje} />
             ))}
             {ocupado ? (
-              <p className="animate-pulse px-1 text-[12px] text-muted-foreground">
-                {conCaptura ? 'Mirando la pantalla y pensando…' : 'Pensando…'}
-              </p>
+              <div className="flex items-center gap-2 rounded-lg bg-foreground/[0.04] px-3 py-2 text-[12px] text-muted-foreground">
+                <Loader2 className="size-3.5 shrink-0 animate-spin text-primary" />
+                <span className="flex-1 truncate">{progreso}</span>
+                {segundos > 2 ? (
+                  <span className="tabular-nums opacity-60">{segundos} s</span>
+                ) : null}
+              </div>
             ) : null}
           </div>
           <div className="flex items-end gap-2 border-t border-border p-2">

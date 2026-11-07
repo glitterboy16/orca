@@ -1,7 +1,9 @@
-// Hideout: ejecución de `claude -p` para el Ayudante. Modo print, salida JSON,
-// herramientas de solo lectura; el prompt entra por stdin para esquivar las
-// comillas de cmd.exe. Si hay API key configurada se usa en vez de la suscripción.
+// Hideout: ejecución de `claude -p` para el Ayudante. Modo print con salida
+// stream-json para retransmitir el progreso (qué archivo lee, qué busca) al
+// chat en vivo; el prompt entra por stdin para esquivar las comillas de
+// cmd.exe. Si hay API key configurada se usa en vez de la suscripción.
 import { spawn } from 'node:child_process'
+import { basename } from 'node:path'
 import { withCliRuntimeOnPath } from '../../shared/node-cli-command-resolution'
 import { buildWindowsCommandInvocation } from '../claude-accounts/windows-command-invocation'
 import { resolveClaudeCommand } from '../codex-cli/command'
@@ -15,14 +17,16 @@ export const pidsPropios = new Set<number>()
 export function ejecutarClaude(
   prompt: string,
   reanudar: string | null,
-  apiKey: string | undefined
+  apiKey: string | undefined,
+  onProgreso?: (texto: string) => void
 ): Promise<string> {
   return new Promise((resolver, rechazar) => {
     const comando = resolveClaudeCommand()
     const args = [
       '-p',
       '--output-format',
-      'json',
+      'stream-json',
+      '--verbose',
       '--allowedTools',
       HERRAMIENTAS_PERMITIDAS,
       '--max-turns',
@@ -48,6 +52,7 @@ export function ejecutarClaude(
     }
     let salida = ''
     let errores = ''
+    let pendiente = ''
     let cerrado = false
     const temporizador = setTimeout(() => {
       cerrado = true
@@ -57,7 +62,21 @@ export function ejecutarClaude(
       )
     }, TIEMPO_MAXIMO_MS)
     hijo.stdout.on('data', (trozo: Buffer) => {
-      salida = `${salida}${trozo.toString()}`
+      const texto = trozo.toString()
+      salida = `${salida}${texto}`
+      if (!onProgreso) {
+        return
+      }
+      // Los eventos llegan como NDJSON; se retransmite el paso en curso al chat.
+      pendiente = `${pendiente}${texto}`
+      const lineas = pendiente.split('\n')
+      pendiente = lineas.pop() ?? ''
+      for (const linea of lineas) {
+        const progreso = progresoDeLinea(linea)
+        if (progreso) {
+          onProgreso(progreso)
+        }
+      }
     })
     hijo.stderr.on('data', (trozo: Buffer) => {
       errores = `${errores}${trozo.toString()}`.slice(-2_000)
@@ -90,6 +109,49 @@ export function ejecutarClaude(
     hijo.stdin.write(prompt)
     hijo.stdin.end()
   })
+}
+
+type BloqueMensaje = {
+  type?: string
+  text?: string
+  name?: string
+  input?: { file_path?: string; pattern?: string }
+}
+
+/** Traduce un evento stream-json al paso que se enseña en el chat. */
+function progresoDeLinea(linea: string): string | null {
+  let datos: { type?: string; subtype?: string; message?: { content?: BloqueMensaje[] } }
+  try {
+    datos = JSON.parse(linea) as typeof datos
+  } catch {
+    return null
+  }
+  if (datos.type === 'system' && datos.subtype === 'init') {
+    return 'Pensando…'
+  }
+  if (datos.type !== 'assistant') {
+    return null
+  }
+  let progreso: string | null = null
+  for (const bloque of datos.message?.content ?? []) {
+    if (bloque.type === 'text' && bloque.text?.trim()) {
+      progreso = 'Escribiendo la respuesta…'
+    }
+    if (bloque.type !== 'tool_use') {
+      continue
+    }
+    if (bloque.name === 'Read') {
+      const archivo = basename(bloque.input?.file_path ?? '')
+      progreso = archivo === 'pantalla.png' ? 'Mirando tu pantalla…' : `Leyendo ${archivo}…`
+    } else if (bloque.name === 'Grep') {
+      progreso = `Buscando «${(bloque.input?.pattern ?? '').slice(0, 40)}» en el código…`
+    } else if (bloque.name === 'Glob') {
+      progreso = 'Explorando archivos…'
+    } else {
+      progreso = `Usando ${bloque.name ?? 'una herramienta'}…`
+    }
+  }
+  return progreso
 }
 
 function matar(pid: number | undefined): void {

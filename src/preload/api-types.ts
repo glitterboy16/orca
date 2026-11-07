@@ -155,6 +155,7 @@ export type PreloadApi = {
     ayudanteReiniciar: () => Promise<void>
     ayudanteConfig: () => Promise<AyudanteConfig>
     ayudanteApiKey: (apiKey: string | null) => Promise<void>
+    ayudanteOnProgreso: (callback: (texto: string) => void) => () => void
     proyectosResumen: () => Promise<ProyectosResumen>
     proyectosAbrir: (ruta: string) => Promise<void>
   }

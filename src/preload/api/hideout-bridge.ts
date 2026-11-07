@@ -4,6 +4,7 @@ import {
   HIDEOUT_AYUDANTE_API_KEY,
   HIDEOUT_AYUDANTE_CONFIG,
   HIDEOUT_AYUDANTE_PREGUNTAR,
+  HIDEOUT_AYUDANTE_PROGRESO,
   HIDEOUT_AYUDANTE_REINICIAR,
   type AyudanteConfig,
   type AyudantePregunta,
@@ -26,5 +27,10 @@ export const hideoutApi = {
   ayudanteReiniciar: (): Promise<void> => ipcRenderer.invoke(HIDEOUT_AYUDANTE_REINICIAR),
   ayudanteConfig: (): Promise<AyudanteConfig> => ipcRenderer.invoke(HIDEOUT_AYUDANTE_CONFIG),
   ayudanteApiKey: (apiKey: string | null): Promise<void> =>
-    ipcRenderer.invoke(HIDEOUT_AYUDANTE_API_KEY, apiKey)
+    ipcRenderer.invoke(HIDEOUT_AYUDANTE_API_KEY, apiKey),
+  ayudanteOnProgreso: (callback: (texto: string) => void): (() => void) => {
+    const oyente = (_evento: Electron.IpcRendererEvent, texto: string): void => callback(texto)
+    ipcRenderer.on(HIDEOUT_AYUDANTE_PROGRESO, oyente)
+    return () => ipcRenderer.removeListener(HIDEOUT_AYUDANTE_PROGRESO, oyente)
+  }
 } satisfies PreloadApi['hideout']

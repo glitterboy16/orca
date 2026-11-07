@@ -141,36 +141,71 @@ async function sesionesDeRaiz(raiz: string): Promise<SesionAgg[]> {
   } catch {
     return []
   }
-  const aggs: SesionAgg[] = []
-  for (const proyecto of proyectos) {
-    let archivos: string[]
-    try {
-      archivos = (await readdir(proyecto)).filter((n) => n.endsWith('.jsonl'))
-    } catch {
-      continue
-    }
-    for (const nombre of archivos) {
-      const filePath = join(proyecto, nombre)
+  // Juntar todas las rutas y leerlas en paralelo: en la primera pasada (sin
+  // cache) es la diferencia entre segundos y una espera larga.
+  const rutas: string[] = []
+  await Promise.all(
+    proyectos.map(async (proyecto) => {
       try {
-        const s = await stat(filePath)
-        const previo = cache.get(filePath)
-        if (previo && previo.mtimeMs === s.mtimeMs && previo.size === s.size) {
-          aggs.push(previo)
-          continue
+        for (const nombre of await readdir(proyecto)) {
+          if (nombre.endsWith('.jsonl')) {
+            rutas.push(join(proyecto, nombre))
+          }
         }
-        const agg = await leerSesion(filePath, s.mtimeMs, s.size)
-        cache.set(filePath, agg)
-        aggs.push(agg)
       } catch {
-        // Un transcript ilegible no tumba el panel.
+        // Carpeta ilegible: se ignora.
       }
-    }
-  }
-  return aggs
+    })
+  )
+  const aggs = await Promise.all(rutas.map((filePath) => sesionDeArchivo(filePath)))
+  return aggs.filter((agg): agg is SesionAgg => agg !== null)
 }
+
+async function sesionDeArchivo(filePath: string): Promise<SesionAgg | null> {
+  try {
+    const s = await stat(filePath)
+    const previo = cache.get(filePath)
+    if (previo && previo.mtimeMs === s.mtimeMs && previo.size === s.size) {
+      return previo
+    }
+    const agg = await leerSesion(filePath, s.mtimeMs, s.size)
+    cache.set(filePath, agg)
+    return agg
+  } catch {
+    // Un transcript ilegible no tumba el panel.
+    return null
+  }
+}
+
+let ultimoResumen: ConsumoResumen | null = null
+let escaneoEnCurso: Promise<ConsumoResumen> | null = null
 
 export async function escanearConsumo(): Promise<ConsumoResumen> {
   return escanearConsumoEnRaices(claudeProjectsHostDirs())
+}
+
+/** Devuelve al instante el último resumen conocido y refresca por detrás; la
+ * primera vez sí espera. Así el panel abre sin bloquear tras el arranque. */
+export async function escanearConsumoRapido(): Promise<ConsumoResumen> {
+  if (!escaneoEnCurso) {
+    escaneoEnCurso = escanearConsumo()
+      .then((r) => {
+        ultimoResumen = r
+        return r
+      })
+      .finally(() => {
+        escaneoEnCurso = null
+      })
+  }
+  return ultimoResumen ?? escaneoEnCurso
+}
+
+/** Lanza un escaneo al arrancar para tener el resumen listo (los per-file
+ * quedan cacheados y las siguientes aperturas son instantáneas). */
+export function precalentarConsumo(): void {
+  void escanearConsumoRapido().catch(() => {
+    // Si falla en el arranque, el panel reintentará al abrirse.
+  })
 }
 
 export async function escanearConsumoEnRaices(raices: string[]): Promise<ConsumoResumen> {

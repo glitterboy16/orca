@@ -10,6 +10,7 @@ import {
   HIDEOUT_AYUDANTE_API_KEY,
   HIDEOUT_AYUDANTE_CONFIG,
   HIDEOUT_AYUDANTE_PREGUNTAR,
+  HIDEOUT_AYUDANTE_PROGRESO,
   HIDEOUT_AYUDANTE_REINICIAR,
   type AyudanteConfig,
   type AyudantePregunta,
@@ -95,15 +96,27 @@ async function responder(
   datos: AyudantePregunta
 ): Promise<AyudanteRespuesta> {
   const rutaCaptura = datos.incluirCaptura ? await capturarPantalla(event) : null
-  const sesionesAbiertas = describirSesiones(await listarSesionesClaude())
+  // Solo se listan los procesos (lanza PowerShell) si la pregunta va de sesiones;
+  // así la pregunta normal no abre ninguna consola ni pierde tiempo.
+  const hablaDeSesiones = /sesion|sesión|chat|abiert|cerrar|cierra|proceso/i.test(datos.pregunta)
+  const sesionesAbiertas = hablaDeSesiones
+    ? describirSesiones(await listarSesionesClaude())
+    : 'no consultadas (pregunta no relacionada)'
   const estado = leerEstado()
   const reanudar = estado.sesionId ?? null
+  // El paso en curso (leyendo X, buscando Y…) se retransmite al chat en vivo.
+  const avisar = (texto: string): void => {
+    if (!event.sender.isDestroyed()) {
+      event.sender.send(HIDEOUT_AYUDANTE_PROGRESO, texto)
+    }
+  }
   let salida: string
   try {
     salida = await ejecutarClaude(
       construirPrompt(datos, rutaCaptura, sesionesAbiertas, reanudar === null),
       reanudar,
-      estado.apiKey
+      estado.apiKey,
+      avisar
     )
   } catch (error) {
     // Si la sesión guardada ya no existe (borrada, otro perfil), se reintenta en limpio.
@@ -114,7 +127,8 @@ async function responder(
     salida = await ejecutarClaude(
       construirPrompt(datos, rutaCaptura, sesionesAbiertas, true),
       null,
-      estado.apiKey
+      estado.apiKey,
+      avisar
     )
   }
   const resultado = interpretarSalida(salida)

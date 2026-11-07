@@ -19,4 +19,5 @@ export type AyudanteConfig = {
 export const HIDEOUT_AYUDANTE_PREGUNTAR = 'hideout:ayudantePreguntar'
 export const HIDEOUT_AYUDANTE_REINICIAR = 'hideout:ayudanteReiniciar'
 export const HIDEOUT_AYUDANTE_CONFIG = 'hideout:ayudanteConfig'
+export const HIDEOUT_AYUDANTE_PROGRESO = 'hideout:ayudanteProgreso'
 export const HIDEOUT_AYUDANTE_API_KEY = 'hideout:ayudanteApiKey'
