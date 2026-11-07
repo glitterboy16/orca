@@ -123,8 +123,9 @@ export type UiViewHistory =
   | 'skills'
   | 'artifacts'
   | 'mobile'
-  // Hideout: panel de consumo propio del fork.
+  // Hideout: vistas propias del fork.
   | 'consumo'
+  | 'plantillas'
 
 export type UISliceCore = {
   sidebarOpen: boolean

@@ -127,5 +127,6 @@ export type TopLevelView =
   | 'skills'
   | 'artifacts'
   | 'mobile'
-  // Hideout: panel de consumo propio del fork.
+  // Hideout: vistas propias del fork.
   | 'consumo'
+  | 'plantillas'

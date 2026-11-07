@@ -18,11 +18,11 @@ La nº 2 (barra de límite siempre visible) ya la cubre la barra de uso de Orca
 
 ## Consumo y ahorro
 
-- [ ] 1. ★ Contador de tokens en vivo por chat, proyecto y día, leyendo los JSONL de Claude Code
+- [x] 1. ★ Contador de tokens en vivo por chat, proyecto y día (panel Consumo, Nov 2026)
 - [o] 2. ★ Barra de límite de sesión y semanal siempre visible (la barra de uso de Orca; falta hora de reinicio)
-- [ ] 3. ★ Detector de chats olvidados: sesiones sin actividad > X horas, con cerrar o compactar
+- [x] 3. ★ Detector de chats olvidados (panel Consumo: >12 h parados con contexto ≥30k; copia `claude --resume`)
 - [ ] 4. ★ Aviso "cambiaste de tarea, haz /clear" cuando el tema del prompt cambia mucho
-- [ ] 5. Medidor de contexto por chat (verde, ámbar o rojo) con botón de /compact
+- [x] 5. Medidor de contexto por chat (semáforo sobre ~200k en el panel Consumo; falta botón /compact directo)
 - [ ] 6. Ranking de qué consume más: skills, subagentes y MCP
 - [ ] 7. Interruptor de MCP por proyecto
 - [ ] 8. Modelo por tarea (Haiku/Sonnet para subagentes, Opus para lo difícil)
@@ -36,7 +36,7 @@ La nº 2 (barra de límite siempre visible) ya la cubre la barra de uso de Orca
 ## Proyectos y chats
 
 - [ ] 15. ★ Pantalla de inicio con proyectos, estado y último chat
-- [ ] 16. ★ Plantillas de proyecto con sus skills y MCP
+- [x] 16. ★ Plantillas de proyecto (v1: página Plantillas con CLAUDE.md y kit de skills/MCP copiables; falta integrar en el flujo de crear proyecto)
 - [o] 17. Varios chats por proyecto en pestañas, cada uno en su worktree
 - [o] 18. Misma tarea a dos agentes, quedarse con la mejor rama
 - [ ] 19. Nombres automáticos de chat
@@ -48,7 +48,7 @@ La nº 2 (barra de límite siempre visible) ya la cubre la barra de uso de Orca
 
 ## Skills
 
-- [ ] 25. ★ Biblioteca de skills con buscador: instaladas, activas, por proyecto, consumo
+- [o] 25. ★ Biblioteca de skills (la página Skills de Orca, visible de serie en Hideout desde Nov 2026)
 - [ ] 26. ★ Buscador de skills nuevas (GitHub, skills.sh) filtrado por nicho
 - [ ] 27. Revisión de seguridad antes de instalar (SKILL.md + scripts)
 - [ ] 28. Packs de skills: Web, Ecommerce, Automatización

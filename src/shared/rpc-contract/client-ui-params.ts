@@ -117,8 +117,9 @@ export const TopLevelViewSchema = z.enum([
   'skills',
   'artifacts',
   'mobile',
-  // Hideout: panel de consumo propio del fork.
-  'consumo'
+  // Hideout: vistas propias del fork.
+  'consumo',
+  'plantillas'
 ])
 
 export const UiUpdateFields = z

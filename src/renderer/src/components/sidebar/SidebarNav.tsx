@@ -10,7 +10,7 @@ import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { SetupGuideSidebarEntry } from './SetupGuideSidebarEntry'
-import { ConsumoSidebarButton } from '@/hideout/ConsumoSidebarButton'
+import { ConsumoSidebarButton, PlantillasSidebarButton } from '@/hideout/ConsumoSidebarButton'
 import { SidebarTaskNavButton } from './SidebarTaskNavButton'
 import { HideSidebarMenu } from './sidebar-nav-controls'
 import { translate } from '@/i18n/i18n'
@@ -38,7 +38,8 @@ export function shouldShowArtifactsButton(
 export function shouldShowSkillsButton(
   settings: Partial<Pick<GlobalSettings, 'showSkillsButton'>> | null | undefined
 ): boolean {
-  return settings?.showSkillsButton === true
+  // Hideout: visible salvo que se oculte a propósito (idea 25; en Orca es opt-in).
+  return settings?.showSkillsButton !== false
 }
 
 export function shouldShowAgentDashboardButton(
@@ -120,6 +121,7 @@ const SidebarNav = React.memo(function SidebarNav() {
       <SetupGuideSidebarEntry />
       <SidebarTaskNavButton />
       <ConsumoSidebarButton />
+      <PlantillasSidebarButton />
       {showArtifactsButton ? (
         <ContextMenu>
           <ContextMenuTrigger asChild>

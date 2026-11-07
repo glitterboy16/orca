@@ -33,8 +33,9 @@ const SkillsPage = lazy(() => import('../components/skills/SkillsPage'))
 const ArtifactsPage = lazy(() => import('../components/artifacts/ArtifactsPage'))
 const WorkspaceSpacePage = lazy(() => import('../components/workspace-space/WorkspaceSpacePage'))
 const MobilePage = lazy(() => import('../components/mobile/MobilePage'))
-// Hideout: panel de consumo propio del fork.
+// Hideout: vistas propias del fork.
 const ConsumoPage = lazy(() => import('../hideout/ConsumoPage'))
+const PlantillasPage = lazy(() => import('../hideout/PlantillasPage'))
 const Terminal = lazy(() => import('../components/Terminal'))
 
 type WorktreeSidebarScrollRefs = {
@@ -100,6 +101,7 @@ function ActivePage({ layout }: { layout: AppChromeLayout }): React.JSX.Element 
       {activeView === 'space' ? <WorkspaceSpacePage /> : null}
       {activeView === 'mobile' ? <MobilePage /> : null}
       {activeView === 'consumo' ? <ConsumoPage /> : null}
+      {activeView === 'plantillas' ? <PlantillasPage /> : null}
       {activeView === 'terminal' && creationLayoutActive && activePendingCreationId ? (
         <PendingCreationSurface
           creationId={activePendingCreationId}

@@ -19,6 +19,10 @@ Fork personal de [Orca](https://github.com/stablyai/orca) (stablyai/orca, MIT) r
 | Icono y logo              | `resources/icon.png`, `icon-dev.png` (punto ámbar), `build/icon.{png,ico}`, `logo.svg` — mochuelo de "Uil zittend op een boek" (Frans Everbag, Rijksmuseum, CC0) a tinta blanca: busto con fundido inferior, procesado con el Grabador de Casa Tere. Fuentes y créditos en `resources/icon-source/hideout/`                                                                                                                                                                                                                  |
 | Borrado de sesiones Codex | Orca lo deshabilita porque el borrado parcial "resucita" (alias hardlink del bridge de cuentas + thread en `state_N.sqlite` que el backfill rematerializa). Hideout borra todos los alias por ruta de fecha (`src/main/ai-vault/codex-session-delete-aliases.ts`) y olvida el thread y sus tablas auxiliares en la base (`src/main/codex/codex-state-db-thread-delete.ts`, best-effort). `codex` entra en `AI_VAULT_DELETABLE_AGENTS` y el handler local valida con las raíces reales del escáner (`host-session-delete.ts`) |
 
+| Panel de Consumo (ideas 1, 3, 5) | Código propio en `src/main/hideout/` (escáner de `~/.claude/projects/*/*.jsonl` con cache por mtime) y `src/renderer/src/hideout/ConsumoPage.tsx`. Enganches mínimos en Orca: vista `consumo` (`ui-chrome-types`, `top-level-view`, `UiViewHistory`, enum RPC móvil), render en `AppWorkspaceShell`, botón en `SidebarNav`, bridge en `preload` y registro IPC en `main-window-core-services` |
+| Plantillas de proyecto (idea 16, v1) | `src/shared/hideout-plantillas.ts` + `src/renderer/src/hideout/PlantillasPage.tsx` (vista `plantillas`): Landing, PrestaShop, Laravel+React, Shopify y n8n con CLAUDE.md y kit de skills/MCP copiables |
+| Skills visible de serie (idea 25) | `default-global-settings.ts` (`showSkillsButton: true`) y `shouldShowSkillsButton` pasa a `!== false` (en Orca es opt-in) |
+
 **Sin tocar a propósito:**
 
 - Esquema `orca://` (protocols): lo usan los deep links de la app móvil y la nube. Renombrarlo rompería esos flujos.
