@@ -23,6 +23,7 @@ import {
 import { isRecoveryReloadInFlight } from './main-window-lifecycle-flags'
 import { RELAY_HOST_CLOSE_REASON } from '../../shared/relay-host-close-reason'
 import { holdLaunchReconnectOptOuts } from '../ipc/ssh/ssh-host-user-disconnect'
+import { registerHideoutConsumoHandlers } from '../hideout/consumo-ipc'
 
 export function attachMainWindowCoreServices(
   window: BrowserWindow,
@@ -65,6 +66,8 @@ export function attachMainWindowCoreServices(
   }
   // Server status probes start inside registerCoreHandlers; held hosts must be marked first.
   holdLaunchReconnectOptOuts(store.getSshTargets())
+  // Hideout: panel de consumo (idempotente; registerCoreHandlers está al límite de max-lines).
+  registerHideoutConsumoHandlers()
   registerCoreHandlers(
     store,
     runtime,

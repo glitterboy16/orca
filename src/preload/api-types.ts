@@ -18,6 +18,7 @@ import type {
   RateLimitsApi
 } from './api/agent-usage-api'
 import type { AiVaultApi } from './api/ai-vault-api'
+import type { ConsumoResumen } from '../shared/hideout-consumo'
 import type { AppApi, E2EApi, PlatformApi } from './api/app-api'
 import type { AutomationsApi } from './api/automation-api'
 import type { BrowserApi } from './api/browser/browser-api'
@@ -141,6 +142,8 @@ export type PreloadApi = {
   openCodeUsage: OpenCodeUsageApi
   museUsage: MuseUsageApi
   aiVault: AiVaultApi
+  // Hideout: superficies propias del fork (panel de consumo).
+  hideout: { consumoResumen: () => Promise<ConsumoResumen> }
   nativeChat: NativeChatApi
   fs: FilesystemApi['fs']
   git: Merged<GitInspectionApi & GitOperationApi>

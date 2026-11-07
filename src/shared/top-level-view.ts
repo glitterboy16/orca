@@ -10,7 +10,9 @@ const TOP_LEVEL_VIEW_LOOKUP: Record<TopLevelView, true> = {
   space: true,
   skills: true,
   artifacts: true,
-  mobile: true
+  mobile: true,
+  // Hideout: panel de consumo propio del fork.
+  consumo: true
 }
 
 export function isTopLevelView(value: unknown): value is TopLevelView {

@@ -165,7 +165,8 @@ export function buildDefaultSettings(args: {
     nestedWorkerMaxDepth: 1,
     orchestrationWorkerAutoReleaseEnabled: true,
     showArtifactsButton: false,
-    showSkillsButton: false,
+    // Hideout: la biblioteca de skills visible de serie (idea 25 del plan).
+    showSkillsButton: true,
     showMobileButton: true,
     showPinnedWorktreesInGroups: false,
     ctrlTabOrderMode: 'mru',
